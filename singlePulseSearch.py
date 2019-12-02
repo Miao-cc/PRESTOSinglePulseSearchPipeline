@@ -8,7 +8,7 @@ from multiprocessing import Pool
 
 
 def single_pulse_search(filename, dm):
-    command = 'single_pulse_search.py -t 7 -b -m 300 -p {filename}_DM*{dm}*.dat'.format(filename=filename,dm=dm)
+    command = 'single_pulse_search.py -t 5 -b -m 300 -p {filename}_DM*{dm}*.dat'.format(filename=filename,dm=dm)
     print command
     os.system(command)
 
