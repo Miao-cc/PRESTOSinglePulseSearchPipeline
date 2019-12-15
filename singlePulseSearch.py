@@ -1,17 +1,13 @@
 import os
 import sys
-import glob
-import yaml
 import numpy as np
 from get_RFI_rate import getBadchan
-from multiprocessing import Pool
+import multiprocessing as MP
 
-
-def single_pulse_search(filename, dm):
+def single_pulse_search(dm, filename):
     command = 'single_pulse_search.py -t 5 -b -m 300 -p {filename}_DM*{dm}*.dat'.format(filename=filename,dm=dm)
     print command
     os.system(command)
-
 
 #rfifind 
 def rfifind(fitsFile):
@@ -41,6 +37,19 @@ def prepdata(dm, fitsFile, rfitime):
         print command
         os.system(command)
 
+# multi processs func
+def multiProcesss(func, params, ncpus):
+    num_cpus = max(1, MP.cpu_count() - 1)
+    if ncpus>num_cpus:
+        print "The max cpu number is: ", num_cpus+1
+        ncpus=num_cpus
+
+    p = MP.Pool(processes=ncpus)
+    for param1 in params[0]:
+        new_args =  [param1] + params[1:]
+        p.apply_async(func, args=new_args)
+    p.close()
+    p.join()
 
 
 if __name__ == '__main__':
@@ -61,6 +70,7 @@ if __name__ == '__main__':
         dDM          = [float(inparameters[3])]
 
     ncpus = 70
+    SP_Sigma = 6
 
     # rfifind
     rfifind(filename)
@@ -74,22 +84,12 @@ if __name__ == '__main__':
         dms = np.concatenate((dms,np.arange(lowDM[i],highDM[i],dDM[i])), axis=0)
 
     # prep data
-    p = Pool(processes=ncpus)
-    for dm in dms:
-        print 'Parent process %s.' % os.getpid()
-        p.apply_async(prepdata, args=(dm, filename, rfitime))
-    p.close()
-    p.join()
+    multiProcesss(prepdata, [dms,filename, rfitime], ncpus)
     
     # search single pulse with no plot
-    p = Pool(processes=ncpus)
-    for dm in dms:
-        print 'Parent process %s.' % os.getpid()
-        p.apply_async(single_pulse_search, args=(filename, dm))
-    p.close()
-    p.join()
+    multiProcesss(single_pulse_search, [dms,filename], ncpus)
     
     # plot result
-    command = 'single_pulse_search.py -t 6 -b -m 300 {filename}_DM*.singlepulse'.format(filename=filename)
+    command = 'single_pulse_search.py -t {SP_Sigma} -b -m 300 {filename}_DM*.singlepulse'.format(filename=filename, SP_Sigma=SP_Sigma)
     print command
     os.system(command)
