@@ -75,8 +75,8 @@ def getBadChanFil(filename, rfiFindTime=0.5):
     fil._file.seek(hdrlen)
     data = fil._file.cread(nchans*nsamp)
     data = np.array(data.reshape((nsamp, nf)).transpose(), order='C')
-    print data.dtype
     l, m = data.shape
+    print data.dtype
     print "data shape", l, m 
 
     # subint num per rfiFindTime
@@ -93,12 +93,12 @@ def getBadChanFil(filename, rfiFindTime=0.5):
         print "reading: ", samp * DownSampNum, " to ", (samp+1) * DownSampNum
         bandpass = data[:, startSamp:endSamp]
         bandpass = np.sum(bandpass,axis=1)
-        print "len Bandpass", len(bandpass)
         bandpassList[samp, :] += bandpass
 
         print "smooth now"
         channel_list = badChanRate(bandpassList[samp, :])
 
+    idxarr = np.arange(bandpassList[0, :].size)
     channel_bad.append(channel_list)
     badchannel = idxarr[idxbad]
     np.savetxt('%s_badChan.txt'%(filename), badchannel, fmt='%d')
@@ -147,6 +147,7 @@ def getBadChanFits(filename, rfiFindTime=0.5):
             bandpassList[subint, :] += bandpass
         print "smooth now"
         channel_list = badChanRate(bandpassList[subint, :])
+    idxarr = np.arange(bandpassList[0, :].size)
     channel_bad.append(channel_list)
     badchannel = idxarr[idxbad]
     np.savetxt('%s_badChan.txt'%(filename), badchannel, fmt='%d')
