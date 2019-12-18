@@ -54,9 +54,9 @@ def getBadChanFil(filename, rfiFindTime=0.5):
     except ImportError:
         print "Import error. No such module: ",sigpyproc, ". SKIP"
         pass
-    else:
-        print "Some errors happened"
-        pass
+    #else:
+        #print "Some errors happened"
+        #pass
 
     fil = filterbank(filename)
     fch1 = fil.header['fch1']
@@ -93,10 +93,10 @@ def getBadChanFil(filename, rfiFindTime=0.5):
         print "reading data now. Pol ", i
         bandpass = data[startSamp:endSamp,:]
         bandpass = np.sum(bandpass,axis=0)
-        bandpassList[subint, :] += bandpass
+        bandpassList[samp, :] += bandpass
 
         print "smooth now"
-        channel_list = badChanRate(bandpassList[subint, :])
+        channel_list = badChanRate(bandpassList[samp, :])
 
     channel_bad.append(channel_list)
     badchannel = idxarr[idxbad]
