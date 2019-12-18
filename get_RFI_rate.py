@@ -77,6 +77,7 @@ def getBadChanFil(filename, rfiFindTime=0.5):
     data = np.array(data.reshape((nsamp, nf)).transpose(), order='C')
     print data.dtype
     l, m = data.shape
+    print "data shape", l, m 
 
     # subint num per rfiFindTime
     DownSampNum = int(rfiFindTime / tsamp)
