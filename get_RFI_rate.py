@@ -91,7 +91,7 @@ def getBadChanFil(filename, rfiFindTime=0.5):
         startSamp = samp * DownSampNum
         endSamp = (samp+1) * DownSampNum
         print "reading: ", samp * DownSampNum, " to ", (samp+1) * DownSampNum
-        bandpass = data[startSamp:endSamp,:]
+        bandpass = data[:, startSamp:endSamp]
         bandpass = np.sum(bandpass,axis=1)
         print "len Bandpass", len(bandpass)
         bandpassList[samp, :] += bandpass
