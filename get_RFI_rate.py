@@ -161,8 +161,7 @@ def getBadchan(filename, rfiFindTime=0.5):
 
     elif FileType=='fits':
         getBadChanFits(filename, rfiFindTime=0.5)
-
-    elif :
+    else :
         print "==================="
         print "Unkown file format. ", FileType
         print "==================="
