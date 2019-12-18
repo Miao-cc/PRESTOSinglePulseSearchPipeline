@@ -157,10 +157,10 @@ def getBadchan(filename, rfiFindTime=0.5):
     FileType = fileTypeCheck(filename)
     # diff func for diff file type
     if FileType=='fil':
-        getBadChanFil(filename, rfiFindTime=0.5):
+        getBadChanFil(filename, rfiFindTime=0.5)
 
     elif FileType=='fits':
-        getBadChanFits(filename, rfiFindTime=0.5):
+        getBadChanFits(filename, rfiFindTime=0.5)
 
     elif :
         print "==================="
