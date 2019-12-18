@@ -36,9 +36,9 @@ def badChanRate(bandpass,level=5):
 
 def fileTypeCheck(filename):
     filename = str(filename)
-    if filename.endswith('.fits')
+    if filename.endswith('.fits'):
         FileType = 'fits'
-    elif filename.endswith('.fil')
+    elif filename.endswith('.fil'):
         FileType = 'fil'
     else:
         FileType = 'Unkown-type'
